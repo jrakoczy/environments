@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+package_name='desktop-environment' # TODO: This should be set up by a builder
+
+derivation_path="$(nix-env -q --installed --no-name --out-path $package_name)"
+
+find "$HOME" -type d -empty -delete
+cp -asf "$derivation_path/config/*" "$HOME"
