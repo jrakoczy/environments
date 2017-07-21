@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# Discard the previously loaded env config stored in the user's home.
+cat "$HOME/.env-meta" | xargs rm
+find "$HOME" -type d -empty -delete
