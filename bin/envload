@@ -8,11 +8,11 @@ store_path=\
     "$(nix-env -q --installed --no-name --out-path @package_name@)/config"
 
 # We are sym-linking Nix store paths, so all config files will be
-# non-modifiable. If you need to change a: file in an imperative way
-# (either to test it or whatever other purpose you have), please use
+# non-modifiable. If you need to change a file in an imperative way
+# (either to test it or for whatever other purpose you have), please use
 #`envtest <filename>`.
 #
-# Note that, If a config file already existed in the user's home, it will
+# Note that, if a config file already exists in the user's home, it will
 # be OVERRIDEN.
 cp -asf "$store_path*" "$HOME"
 
@@ -20,4 +20,4 @@ cp -asf "$store_path*" "$HOME"
 # whole environment may be removed conveniently with `envdel`.
 config_meta="$HOME/.env-meta"
 ls "$store_path" | sed "s#^.*config#$HOME#" > "$config_meta"
-printf "$config_meta" >> "$config_meta"
+:wqprintf "$config_meta" >> "$config_meta"
