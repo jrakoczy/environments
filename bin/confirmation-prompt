@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+read -r -n 1 -p "$1 [y/N]: "
+[[ ! $REPLY =~ ^[yY]$ ]] && exit 1 || exit 0

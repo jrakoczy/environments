@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
+config_meta="$HOME/.env-meta"
+
+set -e
+[ ! -r "$config_meta" ] && exit 1
+confirmation-prompt "Are you sure you want to delete the current env?"
+
 # Discard the previously loaded env config stored in the user's home.
-cat "$HOME/.env-meta" | xargs rm
+cat "$config_meta" | xargs rm
 find "$HOME" -type d -empty -delete

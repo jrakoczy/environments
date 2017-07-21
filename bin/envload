@@ -2,6 +2,9 @@
 # Run this script to load all environment configuration files from the
 # Nix store to the user's home directory.
 
+set -e
+confirmation-prompt "Are you sure you want to overwrite the current env?"
+
 envdel
 
 store_path=\
@@ -13,11 +16,11 @@ store_path=\
 #`envtest <filename>`.
 #
 # Note that, if a config file already exists in the user's home, it will
-# be OVERRIDEN.
+# be OVERWRITTEN.
 cp -asf "$store_path*" "$HOME"
 
 # All loaded file names are stored in an additional meta-file, so the
 # whole environment may be removed conveniently with `envdel`.
 config_meta="$HOME/.env-meta"
 ls "$store_path" | sed "s#^.*config#$HOME#" > "$config_meta"
-:wqprintf "$config_meta" >> "$config_meta"
+printf "$config_meta" >> "$config_meta"
