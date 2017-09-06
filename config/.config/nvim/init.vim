@@ -395,25 +395,6 @@ nmap <silent> <S-Tab> :call BetterBufferNav("bp") <Cr>
 
 " }}}
 
-" Fullscreen Help {{{
-" Opens Help files as if any other file was opened with "e file"
-" also works with completion like regular :help
-
-" This works by opening a blank buffer and setting it's buffer type to 'help'. Now when you run 'help ...' the blank buffer will show the helpfile in fullscreen. The function then adds the buffer to the bufferlist so you can use :bn, :bp, etc.
-function FullScreenHelp(helpfile)
-	enew
-	set buftype=help
-	execute 'help ' . a:helpfile
-	set buflisted
-endfunction
-
-" Open help files the same as you usually do with "help example" and they'll open in a new buffer similar to "e file"
-command -nargs=1 -complete=help Help call FullScreenHelp(<f-args>)
-cabbrev help Help
-cabbrev h Help
-
-" }}}
-
 " Line Return {{{
 " Returns you to your position on file reopen and closes all folds.
 " On fold open your cursor is on the line you were at on the fold.
@@ -427,64 +408,6 @@ function! LineReturn()
 		execute 'normal! g`"zvzzzm'
 	endif
 endfunction
-
-" }}}
-
-" Smart :bd {{{
-" If more than 1 buffer exists close current buffer while retaining splits.
-" bangs(!) are supported as well as arguments after :bd (:bd index.html, etc)
-function SmartBD(bang, argu)
-		if a:bang == 1
-			let l:bang = '!'
-		else
-			let l:bang = ' '
-		endif
-
-		if len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) == 1
-			execute 'bd' . l:bang . ' ' . a:argu
-		else
-			bp
-			execute 'bd' . l:bang . ' #'
-		endif
-
-endfunction
-
-command! -bang -nargs=* BD call SmartBD(<bang>0, <q-args>)
-cnoreabbrev bd BD
-
-" }}}
-
-" Custom message on save {{{
-
-function SaveRO(bang, argu)
-	if a:bang == 1
-		let l:bang = '!'
-	else
-		let l:bang = ' '
-	endif
-
-	if &readonly
-		w !sudo tee % >/dev/null
-		redraw
-	else
-		execute 'w' . l:bang . ' ' . a:argu
-		redraw
-	endif
-endfunction
-
-
-command! -bang -nargs=* W call SaveRO(<bang>0, <q-args>)
-cnoreabbrev w W
-
-" }}}
-
-" Open current file with another program {{{
-
-function! Openwith(program)
-	silent! execute '!' . a:program . ' ' . '"' . expand('%:p') . '"' . ' &'
-endfunction
-
-command! -bang -nargs=* Openwith call Openwith(<q-args>)
 
 " }}}
 
