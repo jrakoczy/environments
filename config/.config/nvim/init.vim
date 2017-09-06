@@ -78,7 +78,6 @@ Plug 'othree/html5.vim'
 call plug#end()
 
 " }}}
-" Dylan's init.vim
 
 " Filetypes {{{
 
@@ -95,9 +94,6 @@ augroup Filetypes
     autocmd Filetype sh let g:is_bash=1
     autocmd Filetype sh setlocal foldmethod=syntax
 
-    " Compile Pascal on file save
-    autocmd BufWritePost *.pas :FPC
-
 	" All Filetypes
 	" Disable comment on newline
 	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -112,9 +108,6 @@ augroup Filetypes
 	" Markdown
 	" set .md files to filetype markdown
 	autocmd BufNewFile,BufRead *.md set filetype=markdown
-
-	" Equalize splits on resize, mainly used with Goyo to fix it's padding on resize.
-	autocmd VimResized * execute "normal \<C-W>="
 
     " Plugins
     autocmd FileType xdefaults setlocal commentstring=!\ %s
@@ -149,9 +142,8 @@ set wrap
 set linebreak
 
 " Set textwidth to 80 characters
-set textwidth=0
+set textwidth=80
 set nolist
-set wrapmargin=0
 
 " Copy indent from previous line on linebreak
 set autoindent
