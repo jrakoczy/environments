@@ -17,9 +17,6 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
-" Autogenerate a table of contents in Markdown files
-Plug 'mzlogin/vim-markdown-toc'
-
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -44,6 +41,13 @@ Plug 'Shougo/neco-syntax'
     let g:deoplete#auto_complete_delay = 0
     inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
+" On-the-fly interpreter
+Plug 'metakirby5/codi.vim'
+
+" Syntax checking
+Plug 'scrooloose/syntastic'
+Plug 'nvie/vim-flake8'
+
 " Snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -65,11 +69,19 @@ Plug 'junegunn/vim-oblique'
 	let g:oblique#incsearch_highlight_all = 1
 	let g:oblique#clear_highlight = 1
 
-" Insert brackets on enter.
+" Auto-close brackets
 Plug 'rstacruz/vim-closer'
-Plug 'tpope/vim-endwise'
 
-	vmap s S
+" Surround text with given string literal.
+Plug 'tpope/vim-surround'
+    map <Leader>] cs
+    map <Leader>[[ yss
+    map <Leader>[ ysiw
+
+" Comment line/block
+Plug 'tpope/vim-commentary'
+    nmap " gcc
+    vmap " gc
 
 " Filetype Plugins
 Plug 'hail2u/vim-css3-syntax'
@@ -384,9 +396,9 @@ set fillchars=fold:-
 " Maps <Tab> to cycle though buffers but only if they're modifiable.
 
 function! BetterBufferNav(bcmd)
-	if &modifiable == 1 || &filetype ==? 'help'
-		execute a:bcmd
-	endif
+    if &modifiable == 1 || &filetype ==? 'help'
+        execute a:bcmd
+    endif
 endfunction
 
 " Maps Tab and Shift Tab to cycle through buffers
@@ -399,14 +411,14 @@ nmap <silent> <S-Tab> :call BetterBufferNav("bp") <Cr>
 " Returns you to your position on file reopen and closes all folds.
 " On fold open your cursor is on the line you were at on the fold.
 augroup line_return
-	au!
-	autocmd BufReadPost * :call LineReturn()
+    au!
+    autocmd BufReadPost * :call LineReturn()
 augroup END
 
 function! LineReturn()
-	if line("'\"") > 0 && line("'\"") <= line('$')
-		execute 'normal! g`"zvzzzm'
-	endif
+    if line("'\"") > 0 && line("'\"") <= line('$')
+        execute 'normal! g`"zvzzzm'
+    endif
 endfunction
 
 " }}}
@@ -414,7 +426,7 @@ endfunction
 " Chmod +x current file {{{
 
 function! Chmox()
-	execute '!chmod +x ' . expand('%:p')
+    execute '!chmod +x ' . expand('%:p')
 endfunction
 
 command! Chmox call Chmox()
