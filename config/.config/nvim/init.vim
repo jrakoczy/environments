@@ -28,25 +28,21 @@ Plug 'w0rp/ale'
     let g:ale_lint_on_text_changed = 0
     let g:ale_lint_on_enter = 0
     let g:ale_linters_sh_shellcheck_exclusions = 'SC1090,SC2155'
+    let g:ale_fix_on_save = 1
+
     nmap <silent> <C-n> <Plug>(ale_next_wrap)
     nmap <silent> <C-N> <Plug>(ale_previous_wrap)
 
 " Async Completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'davidhalter/jedi'
 Plug 'zchee/deoplete-jedi'
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/neco-syntax'
     let g:deoplete#enable_at_startup = 1
     let g:deoplete#auto_complete_delay = 0
     inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" On-the-fly interpreter
-Plug 'metakirby5/codi.vim'
-
-" Syntax checking
-Plug 'scrooloose/syntastic'
-Plug 'nvie/vim-flake8'
 
 " Snippets
 Plug 'SirVer/ultisnips'
@@ -68,6 +64,9 @@ Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 	let g:oblique#incsearch_highlight_all = 1
 	let g:oblique#clear_highlight = 1
+
+" Fixed folding for Python
+Plug 'tmhedberg/SimpylFold'
 
 " Auto-close brackets
 Plug 'rstacruz/vim-closer'
