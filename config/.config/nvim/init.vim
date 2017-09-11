@@ -24,7 +24,11 @@ Plug 'junegunn/fzf.vim'
 
 " Async Linting
 Plug 'w0rp/ale'
+    let g:ale_fixers = {
+    \   'python': ['isort', 'yapf'],
+    \}
     let g:ale_lint_on_save = 1
+    let g:ale_fix_on_save = 1
     let g:ale_lint_on_text_changed = 0
     let g:ale_lint_on_enter = 0
     let g:ale_linters_sh_shellcheck_exclusions = 'SC1090,SC2155'
@@ -62,6 +66,9 @@ Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 	let g:oblique#incsearch_highlight_all = 1
 	let g:oblique#clear_highlight = 1
+
+" Sensible folding hooks
+Plug 'Konfekt/FastFold'
 
 " Fixed folding for Python
 Plug 'tmhedberg/SimpylFold'
