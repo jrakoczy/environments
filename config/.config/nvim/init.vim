@@ -22,10 +22,14 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
     nmap <C-x> :FZF ~<CR>
 
+" Run and print output in a quickfix window
+Plug 'tpope/vim-dispatch'
+nnoremap <F9> :Dispatch<CR>
+
 " Async Linting
 Plug 'w0rp/ale'
     let g:ale_fixers = {
-    \   'python': ['isort', 'yapf'],
+    \   'python': ['isort', 'yapf']
     \}
     let g:ale_lint_on_save = 1
     let g:ale_fix_on_save = 1
@@ -128,6 +132,8 @@ augroup Filetypes
     " Plugins
     autocmd FileType xdefaults setlocal commentstring=!\ %s
     autocmd FileType css setlocal commentstring=/*%s*/ shiftwidth=2 softtabstop=2 expandtab
+    autocmd FileType python let b:dispatch = 'python %'
+    autocmd FileType sh let b:dispatch = './%'
 augroup END
 
 syntax enable
