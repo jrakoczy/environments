@@ -17,14 +17,28 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
+" Repeat commands
+Plug 'tpope/vim-repeat'
+
+" Tab and status bar
+Plug 'vim-airline/vim-airline'
+    let g:airline#extensions#tabline#enabled = 1
+
 " Fuzzy finder
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
     nmap <C-x> :FZF ~<CR>
 
+" File explorer
+Plug 'scrooloose/nerdtree'
+    let g:NERDTreeShowHidden = 1
+
+" Yank history
+Plug 'maxbrunsfeld/vim-yankstack'
+
 " Run and print output in a quickfix window
 Plug 'tpope/vim-dispatch'
-nnoremap <F9> :Dispatch<CR>
+    nnoremap <F9> :Dispatch<CR>
 
 " Async Linting
 Plug 'w0rp/ale'
@@ -57,6 +71,9 @@ Plug 'honza/vim-snippets'
     let g:UltiSnipsJumpForwardTrigger='<c-b>'
     let g:UltiSnipsJumpBackwardTrigger='<c-z>'
 
+" Enhanced text object selection
+Plug 'wellle/targets.vim'
+
 " Clicking v expands region
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line'
@@ -70,6 +87,9 @@ Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 	let g:oblique#incsearch_highlight_all = 1
 	let g:oblique#clear_highlight = 1
+
+" Display indent levels
+Plug 'nathanaelkane/vim-indent-guides'
 
 " Sensible folding hooks
 Plug 'Konfekt/FastFold'
