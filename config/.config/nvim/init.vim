@@ -20,6 +20,20 @@ call plug#begin('~/.config/nvim/plugged')
 " Repeat commands
 Plug 'tpope/vim-repeat'
 
+" Auto-save
+Plug '907th/vim-auto-save'
+    let g:auto_save = 1
+
+" Save sessions
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
+    " Don't save hidden and unloaded buffers in sessions.
+    set sessionoptions-=buffers
+    let g:session_directory = '~/.config/nvim/sessions'
+    let g:session_default_overwrite = 1
+    let g:session_autosave = 'yes'
+    let g:session_verbose_messages = 0
+
 " Tab and status bar
 Plug 'vim-airline/vim-airline'
     let g:airline#extensions#tabline#enabled = 1
@@ -27,7 +41,7 @@ Plug 'vim-airline/vim-airline'
 " Fuzzy finder
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-    nmap <C-x> :FZF /<CR>
+    nmap <C-x> :FZF ~<CR>
 
 " File explorer
 Plug 'scrooloose/nerdtree'
@@ -114,6 +128,7 @@ Plug 'tpope/vim-commentary'
 " Filetype Plugins
 Plug 'hail2u/vim-css3-syntax'
 Plug 'othree/html5.vim'
+Plug 'LnL7/vim-nix'
 
 call plug#end()
 
