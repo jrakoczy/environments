@@ -6,8 +6,8 @@ let g:mapleader = "\<space>"
 
 " Auto install plug if not found
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-	silent !curl -fLo ~/.config//nvim/autoload/plug.vim --create-dirs
-	\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    silent !curl -fLo ~/.config//nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
     augroup PLUG
         au!
@@ -23,6 +23,9 @@ Plug 'tpope/vim-repeat'
 " Auto-save
 Plug '907th/vim-auto-save'
     let g:auto_save = 1
+
+" File utils (move, rename, delete, save as sudo, etc.)
+Plug 'tpope/vim-eunuch'
 
 " Save sessions
 Plug 'xolox/vim-misc'
