@@ -50,6 +50,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
     let g:NERDTreeShowHidden = 1
 
+" Mostly for branch name in the Airline bar and prettier diffs.
+Plug 'tpope/vim-fugitive'
+
 " Yank history
 Plug 'maxbrunsfeld/vim-yankstack'
 
