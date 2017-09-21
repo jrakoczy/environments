@@ -114,6 +114,10 @@ for_window [class="VirtualBox"] floating enable
 # Toggle sticky windows
 bindsym $mod+e sticky toggle
 
+# Open a new terminal window
+bindsym $mod+Return exec xterm
+
+
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id "vol up &"
 bindsym XF86AudioLowerVolume exec --no-startup-id "vol down &"
@@ -126,7 +130,7 @@ bindsym XF86AudioPrev exec "song prev"
 
 # Take a screenshot
 bindsym $mod+p exec "scr full"
-bindsym $mod+Shift+p "scr crop"  
+bindsym $mod+Shift+p "scr crop"
 
 # Center window
 bindsym $mod+c move position center
