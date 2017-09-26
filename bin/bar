@@ -6,8 +6,8 @@
 #
 # Depends on: xorg-xrandr, wmctrl, mpc, lemonbar, ip, xdotool
 
-font="Roboto 10"
-icon="Roboo Mono 10"
+font="Roboto:size=10"
+icon="Roboo Mono:size=10"
 height="${BAR_HEIGHT:-36}"
 
 
@@ -61,7 +61,7 @@ main() {
     # https://github.com/dylanaraps/pywal
     . "${HOME}/.cache/wal/colors.sh"
 
-    Loop and print the info.
+    # Loop and print the info.
     while :; do
         workspaces="$(get_workspaces)"
         date="$(get_date)"
