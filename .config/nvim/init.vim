@@ -44,7 +44,7 @@ Plug 'vim-airline/vim-airline'
 " Fuzzy finder
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-    nmap <C-x> :FZF ~<CR>
+    nmap <C-x> :FZF /<CR>
 
 " File explorer
 Plug 'scrooloose/nerdtree'
