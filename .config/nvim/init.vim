@@ -40,6 +40,7 @@ Plug 'xolox/vim-session'
 " Tab and status bar
 Plug 'vim-airline/vim-airline'
     let g:airline#extensions#tabline#enabled = 1
+Plug 'vim-airline/vim-airline-themes'
 
 " Fuzzy finder
 Plug 'junegunn/fzf'
