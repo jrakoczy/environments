@@ -41,6 +41,8 @@ Plug 'xolox/vim-session'
 Plug 'vim-airline/vim-airline'
     let g:airline#extensions#tabline#enabled = 1
 Plug 'vim-airline/vim-airline-themes'
+    let g:airline_theme = "minimalist"
+
 
 " Fuzzy finder
 Plug 'junegunn/fzf'
