@@ -20,7 +20,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
 export contend_env=kuba-rakoczy
 
 
-. ~/.local/share/git-prompt.sh
+# . ~/.local/share/git-prompt.sh
 
 precmd() {
   local last_exitcode="$?"
@@ -44,12 +44,12 @@ precmd() {
   [ "$last_exitcode" -ne 0 ] && PS1+="$error"
   PS1+="$last_exitcode$reset$D)"
 
-  PS1+="$L%n$D@$L$__mshell_hostname$D:$L%~"
+  # PS1+="$L%n$D@$L$__mshell_hostname$D:$L%~"
 
-  local git="$(__git_ps1 '%s')"
-  if [ -n "$git" ] ; then
-    PS1+="$D:($M$git$D)"
-  fi
+  # local git="$(__git_ps1 '%s')"
+  # if [ -n "$git" ] ; then
+    # PS1+="$D:($M$git$D)"
+  # fi
 
   PS1+="$D%# $reset"
 
@@ -76,6 +76,7 @@ bindkey "\e[1;5D" backward-word
 ## Configure dirstack
 
 DIRSTACKFILE="$HOME/.cache/zsh/dirs"
+install -D /dev/null "$DIRSTACKFILE"
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1]
