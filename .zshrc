@@ -8,16 +8,31 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:hosts' hosts ''
 setopt completealiases
 
-setopt HIST_IGNORE_DUPS
-setopt APPEND_HISTORY
-setopt EXTENDED_HISTORY
+# History
+
+
+# Save to and read from .zsh_history on every command invocation.
+setopt inc_append_history
+
+# Save a timestamp and execution time.
+setopt extended_history
+setopt hist_ignore_dups
+
+setopt hist_ignore_space
+
+# Substitute a history expansion literal instead of executing a command
+# immediately.
+setopt hist_verify
+
 export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=$HISTSIZE
+
+
 export VISUAL=vim
 export EDITOR=vim
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
-export contend_env=kuba-rakoczy
+
+export ZSH_THEME='amuse'
 
 
 # . ~/.local/share/git-prompt.sh
@@ -94,3 +109,52 @@ setopt pushdignoredups
 
 ## This reverts the +/- operators.
 setopt pushdminus
+
+
+## Aliases
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+alias -- -='cd -'
+alias 1='cd -'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
+
+# Grep
+
+# is x grep argument available?
+grep-flag-available() {
+    echo | grep $1 "" >/dev/null 2>&1
+}
+
+GREP_OPTIONS=""
+
+# color grep results
+if grep-flag-available --color=auto; then
+    GREP_OPTIONS+=" --color=auto"
+fi
+
+# ignore VCS folders (if the necessary grep flags are available)
+VCS_FOLDERS="{.bzr,CVS,.git,.hg,.svn}"
+
+if grep-flag-available --exclude-dir=.cvs; then
+    GREP_OPTIONS+=" --exclude-dir=$VCS_FOLDERS"
+elif grep-flag-available --exclude=.cvs; then
+    GREP_OPTIONS+=" --exclude=$VCS_FOLDERS"
+fi
+
+# export grep settings
+alias grep="grep $GREP_OPTIONS"
+
+# clean up
+unset GREP_OPTIONS
+unset VCS_FOLDERS
+unfunction grep-flag-available
