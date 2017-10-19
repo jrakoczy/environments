@@ -3,21 +3,32 @@ unalias -m '*'
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+###############################################################################
+#                                  Plugins                                    #
+###############################################################################
+
+. ~/.local/share/git-prompt.sh
+
+###############################################################################
+#                                 Completion                                  #
+###############################################################################
+
 autoload -U compinit && compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*:hosts' hosts ''
 setopt completealiases
 
-# History
-
+###############################################################################
+#                                  History                                    #
+###############################################################################
 
 # Save to and read from .zsh_history on every command invocation.
 setopt inc_append_history
 
 # Save a timestamp and execution time.
 setopt extended_history
-setopt hist_ignore_dups
 
+setopt hist_ignore_dups
 setopt hist_ignore_space
 
 # Substitute a history expansion literal instead of executing a command
@@ -28,14 +39,9 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=$HISTSIZE
 
-
-export VISUAL=vim
-export EDITOR=vim
-
-export ZSH_THEME='amuse'
-
-
-# . ~/.local/share/git-prompt.sh
+###############################################################################
+#                                  Prompt                                     #
+###############################################################################
 
 precmd() {
   local last_exitcode="$?"
@@ -59,59 +65,50 @@ precmd() {
   [ "$last_exitcode" -ne 0 ] && PS1+="$error"
   PS1+="$last_exitcode$reset$D)"
 
-  # PS1+="$L%n$D@$L$__mshell_hostname$D:$L%~"
-
-  # local git="$(__git_ps1 '%s')"
-  # if [ -n "$git" ] ; then
-    # PS1+="$D:($M$git$D)"
-  # fi
+  PS1+="$L%n$D@$L%M$D(%WT%T)$L:$D%~"
+  local git="$(__git_ps1 '%s')"
+  if [ -n "$git" ] ; then
+    PS1+="$D:($M$git$D)"
+  fi
 
   PS1+="$D%# $reset"
 
   PS2="$M%_$D> $reset"
 }
 
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-
-bindkey "\e[A" up-line-or-beginning-search
-bindkey "\e[B" down-line-or-beginning-search
-
-bindkey "\e[1~" beginning-of-line
-bindkey "\e[3~" delete-char
-bindkey "\e[4~" end-of-line
-bindkey "\e[5~" beginning-of-buffer-or-history
-bindkey "\e[6~" end-of-buffer-or-history
-
-bindkey "\e[1;5C" forward-word
-bindkey "\e[1;5D" backward-word
-
-## Configure dirstack
+###############################################################################
+#                                  Dirstack                                   #
+###############################################################################
 
 DIRSTACKFILE="$HOME/.cache/zsh/dirs"
+DIRSTACKSIZE=20
+
+# Persist dirstack across sessions.
 install -D /dev/null "$DIRSTACKFILE"
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
+
 chpwd() {
   print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
 }
 
-DIRSTACKSIZE=20
+setopt autopushd pushdsilent
 
-setopt autopushd pushdsilent pushdtohome
+# pushd without args does `pushd ~`.
+setopt pushdtohome
 
-## Remove duplicate entries
+## Remove duplicate entries.
 setopt pushdignoredups
 
 ## This reverts the +/- operators.
 setopt pushdminus
 
+###############################################################################
+#                                  Aliases                                    #
+###############################################################################
 
-## Aliases
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
@@ -158,3 +155,11 @@ alias grep="grep $GREP_OPTIONS"
 unset GREP_OPTIONS
 unset VCS_FOLDERS
 unfunction grep-flag-available
+
+###############################################################################
+#                            Other Env Variables                              #
+###############################################################################
+
+export VISUAL=vim
+export EDITOR=vim
+
