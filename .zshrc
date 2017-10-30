@@ -43,28 +43,25 @@ export SAVEHIST=$HISTSIZE
 #                                  Prompt                                     #
 ###############################################################################
 
+prompt_color() {
+    local hash="$(md5sum <<< "$hostname" | head -c5)"
+    print "$((16#$hash % 255))"
+}
+
 precmd() {
 
   local last_exitcode="$?"
 
-  if [ "$EUID" -ne 0 ] ; then
-    local L='%{%F{cyan}%B%}'
-    local M='%{%b%F{cyan}%}'
-    local D='%{%F{blue}%B%}'
-  else
-    local L='%{%F{magenta}%B%}'
-    local M='%{%b%F{magenta}%}'
-    local D='%{%F{red}%B%}'
-  fi
+  local hostname_color="$(prompt_color)"
+  local L="%{%F{$hostname_color}%B%}"
+  local D="%{%F{$((($hostname_color + 125) % 255))}%B%}"
 
   local error='%{%f%K{red}%}'
   local reset='%{%f%k%b%}'
 
   PS1=''
 
-  PS1+="$D%\["
-  [ "$last_exitcode" -ne 0 ] && PS1+="$error"
-  PS1+="$last_exitcode]"
+  PS1+="$D%\[$last_exitcode]"
 
   PS1+=" $L%n$D [at] $L%M$D [in] $L%~"
 
@@ -73,7 +70,8 @@ precmd() {
     PS1+="$D [on] $L$git"
   fi
 
-  PS1+="$D [+] $reset"
+  PS1+="
+> $reset"
 
   PS2="$M%_$D> $reset"
 
