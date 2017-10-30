@@ -44,6 +44,7 @@ export SAVEHIST=$HISTSIZE
 ###############################################################################
 
 precmd() {
+
   local last_exitcode="$?"
 
   if [ "$EUID" -ne 0 ] ; then
@@ -61,19 +62,24 @@ precmd() {
 
   PS1=''
 
-  PS1+="$D($M"
+  PS1+="$D%\["
   [ "$last_exitcode" -ne 0 ] && PS1+="$error"
-  PS1+="$last_exitcode$reset$D)"
+  PS1+="$last_exitcode]"
 
-  PS1+="$L%n$D@$L%M$D(%WT%T)$L:$D%~"
+  PS1+=" $L%n$D [at] $L%M$D [in] $L%~"
+
   local git="$(__git_ps1 '%s')"
   if [ -n "$git" ] ; then
-    PS1+="$D:($M$git$D)"
+    PS1+="$D [on] $L$git"
   fi
 
-  PS1+="$D%# $reset"
+  PS1+="$D [+] $reset"
 
   PS2="$M%_$D> $reset"
+
+  RPROMPT="[%D %T]"
+
+  print ''
 }
 
 ###############################################################################
