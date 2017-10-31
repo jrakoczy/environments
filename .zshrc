@@ -58,15 +58,15 @@ precmd() {
 
   PS1=''
 
-  PS1+="$D%\[$last_exitcode]"
+  PS1+="$secondary%\[$last_exitcode]"
 
   # user [at] host [in] directory
-  PS1+=" $primary%n$D [at] $primary%M$D [in] $primary%~"
+  PS1+=" $primary%n$secondary [at] $primary%M$secondary [in] $primary%~"
 
   # [on] branch
   local git="$(__git_ps1 '%s')"
   if [ -n "$git" ] ; then
-    PS1+="$D [on] $primary$git"
+    PS1+="$secondary [on] $primary$git"
   fi
 
   # Type a command in a new line.
