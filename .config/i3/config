@@ -115,8 +115,7 @@ for_window [class="VirtualBox"] floating enable
 bindsym $mod+e sticky toggle
 
 # Open a new terminal window
-bindsym $mod+Return exec xterm
-
+bindsym $mod+Return exec termite
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id "vol up &"
