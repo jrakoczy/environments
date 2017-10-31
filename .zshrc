@@ -7,7 +7,15 @@ unalias -m '*'
 #                                  Plugins                                    #
 ###############################################################################
 
-. ~/.local/share/git-prompt.sh
+plugins_path=~/.local/share
+fpath=($plugins_path/wd $fpath)
+
+. "$plugins_path/git-prompt"
+
+# Directory aliases.
+autoload -Uz wd
+
+unset plugins_path
 
 ###############################################################################
 #                                 Completion                                  #
