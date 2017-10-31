@@ -49,34 +49,36 @@ prompt_color() {
 }
 
 precmd() {
-
   local last_exitcode="$?"
 
   local hostname_color="$(prompt_color)"
-  local L="%{%F{$hostname_color}%B%}"
-  local D="%{%F{$((($hostname_color + 125) % 255))}%B%}"
-
-  local error='%{%f%K{red}%}'
+  local primary="%{%F{$hostname_color}%B%}"
+  local secondary="%{%F{$((($hostname_color + 10) % 255))}%B%}"
   local reset='%{%f%k%b%}'
 
   PS1=''
 
   PS1+="$D%\[$last_exitcode]"
 
-  PS1+=" $L%n$D [at] $L%M$D [in] $L%~"
+  # user [at] host [in] directory
+  PS1+=" $primary%n$D [at] $primary%M$D [in] $primary%~"
 
+  # [on] branch
   local git="$(__git_ps1 '%s')"
   if [ -n "$git" ] ; then
-    PS1+="$D [on] $L$git"
+    PS1+="$D [on] $primary$git"
   fi
 
+  # Type a command in a new line.
   PS1+="
 > $reset"
 
-  PS2="$M%_$D> $reset"
+  PS2="$secondary> $reset"
 
+  # Date-time.
   RPROMPT="[%D %T]"
 
+  # Separate commands with an empty line.
   print ''
 }
 
