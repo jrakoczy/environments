@@ -177,3 +177,14 @@ unfunction grep-flag-available
 export VISUAL=vim
 export EDITOR=vim
 
+###############################################################################
+#                              Startup setup                                  #
+###############################################################################
+
+# Import a colorscheme for each new session, suppressing all control messages.
+# The `-t` switch prevents from printing junk output on session start.
+(wal -r -t &)
+
+if [ "$TMUX" = "" ]; then
+    tmux -2;
+fi
