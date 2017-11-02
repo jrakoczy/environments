@@ -7,24 +7,21 @@ unalias -m '*'
 #                                  Plugins                                    #
 ###############################################################################
 
-plugins_path=~/.local/share
-fpath=($plugins_path/wd $fpath)
+plugins_path=~/.local/share/zsh-plugins
+fpath=($plugins_path $fpath)
 
 . "$plugins_path/git-prompt"
 
 # Directory aliases.
 autoload -Uz wd
 
-unset plugins_path
-
-###############################################################################
-#                                 Completion                                  #
-###############################################################################
-
+# Auto-completion.
 autoload -U compinit && compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*:hosts' hosts ''
 setopt completealiases
+
+unset plugins_path
 
 ###############################################################################
 #                                  History                                    #
@@ -188,3 +185,6 @@ export EDITOR=vim
 if [ "$TMUX" = "" ]; then
     tmux -2;
 fi
+
+# Clean up all stale warping points.
+wd clean!
