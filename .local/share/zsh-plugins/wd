@@ -334,148 +334,146 @@ wd_clean() {
     fi
 }
 
-wd() {
-    local WD_CONFIG=$HOME/.warprc
-    local WD_QUIET=0
-    local WD_EXIT_CODE=0
-    local WD_DEBUG=0
+local WD_CONFIG=$HOME/.warprc
+local WD_QUIET=0
+local WD_EXIT_CODE=0
+local WD_DEBUG=0
 
-    # Parse 'meta' options first to avoid the need to have them before
-    # other commands. The `-D` flag consumes recognized options so that
-    # the actual command parsing won't be affected.
+# Parse 'meta' options first to avoid the need to have them before
+# other commands. The `-D` flag consumes recognized options so that
+# the actual command parsing won't be affected.
 
-    zparseopts -D -E \
-        c:=wd_alt_config -config:=wd_alt_config \
-        q=wd_quiet_mode -quiet=wd_quiet_mode \
-        v=wd_print_version -version=wd_print_version \
-        d=wd_debug_mode -debug=wd_debug_mode
+zparseopts -D -E \
+    c:=wd_alt_config -config:=wd_alt_config \
+    q=wd_quiet_mode -quiet=wd_quiet_mode \
+    v=wd_print_version -version=wd_print_version \
+    d=wd_debug_mode -debug=wd_debug_mode
 
-    if [[ ! -z $wd_print_version ]]
-    then
-        echo "wd version $WD_VERSION"
-    fi
+if [[ ! -z $wd_print_version ]]
+then
+    echo "wd version $WD_VERSION"
+fi
 
-    if [[ ! -z $wd_alt_config ]]
-    then
-        WD_CONFIG=$wd_alt_config[2]
-    fi
+if [[ ! -z $wd_alt_config ]]
+then
+    WD_CONFIG=$wd_alt_config[2]
+fi
 
-    # check if config file exists
-    if [ ! -e $WD_CONFIG ]
-    then
-        # if not, create config file
-        touch $WD_CONFIG
-    fi
+# check if config file exists
+if [ ! -e $WD_CONFIG ]
+then
+    # if not, create config file
+    touch $WD_CONFIG
+fi
 
-    # load warp points
-    typeset -A points
-    while read -r line
+# load warp points
+typeset -A points
+while read -r line
+do
+    arr=(${(s,:,)line})
+    key=${arr[1]}
+    # join the rest, in case the path contains colons
+    val=${(j,:,)arr[2,-1]}
+
+    points[$key]=$val
+done < $WD_CONFIG
+
+# get opts
+args=$(getopt -o a:r:c:lhs -l add:,rm:,clean\!,list,ls:,path:,help,show -- $*)
+
+# check if no arguments were given, and that version is not set
+if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
+then
+    wd_print_usage
+
+    # check if config file is writeable
+elif [ ! -w $WD_CONFIG ]
+then
+    # do nothing
+    # can't run `exit`, as this would exit the executing shell
+    wd_exit_fail "\'$WD_CONFIG\' is not writeable."
+
+else
+
+    # parse rest of options
+    for o
     do
-        arr=(${(s,:,)line})
-        key=${arr[1]}
-        # join the rest, in case the path contains colons
-        val=${(j,:,)arr[2,-1]}
+        case "$o"
+            in
+            -a|--add|add)
+                wd_add false $2
+                break
+                ;;
+            -a!|--add!|add!)
+                wd_add true $2
+                break
+                ;;
+            -r|--remove|rm)
+                wd_remove $2
+                break
+                ;;
+            -l|list)
+                wd_list_all
+                break
+                ;;
+            -ls|ls)
+                wd_ls $2
+                break
+                ;;
+            -p|--path|path)
+                wd_path $2
+                break
+                ;;
+            -h|--help|help)
+                wd_print_usage
+                break
+                ;;
+            -s|--show|show)
+                wd_show $2
+                break
+                ;;
+            -c|--clean|clean)
+                wd_clean false
+                break
+                ;;
+            -c!|--clean!|clean!)
+                wd_clean true
+                break
+                ;;
+            *)
+                wd_warp $o $2
+                break
+                ;;
+            --)
+                break
+                ;;
+        esac
+    done
+fi
 
-        points[$key]=$val
-    done < $WD_CONFIG
+## garbage collection
+# if not, next time warp will pick up variables from this run
+# remember, there's no sub shell
 
-    # get opts
-    args=$(getopt -o a:r:c:lhs -l add:,rm:,clean\!,list,ls:,path:,help,show -- $*)
+unset wd_warp
+unset wd_add
+unset wd_remove
+unset wd_show
+unset wd_list_all
+unset wd_print_msg
+unset wd_yesorno
+unset wd_print_usage
+unset wd_alt_config
+unset wd_quiet_mode
+unset wd_print_version
 
-    # check if no arguments were given, and that version is not set
-    if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
-    then
-        wd_print_usage
+unset args
+unset points
+unset val &> /dev/null # fixes issue #1
 
-        # check if config file is writeable
-    elif [ ! -w $WD_CONFIG ]
-    then
-        # do nothing
-        # can't run `exit`, as this would exit the executing shell
-        wd_exit_fail "\'$WD_CONFIG\' is not writeable."
-
-    else
-
-        # parse rest of options
-        for o
-        do
-            case "$o"
-                in
-                -a|--add|add)
-                    wd_add false $2
-                    break
-                    ;;
-                -a!|--add!|add!)
-                    wd_add true $2
-                    break
-                    ;;
-                -r|--remove|rm)
-                    wd_remove $2
-                    break
-                    ;;
-                -l|list)
-                    wd_list_all
-                    break
-                    ;;
-                -ls|ls)
-                    wd_ls $2
-                    break
-                    ;;
-                -p|--path|path)
-                    wd_path $2
-                    break
-                    ;;
-                -h|--help|help)
-                    wd_print_usage
-                    break
-                    ;;
-                -s|--show|show)
-                    wd_show $2
-                    break
-                    ;;
-                -c|--clean|clean)
-                    wd_clean false
-                    break
-                    ;;
-                -c!|--clean!|clean!)
-                    wd_clean true
-                    break
-                    ;;
-                *)
-                    wd_warp $o $2
-                    break
-                    ;;
-                --)
-                    break
-                    ;;
-            esac
-        done
-    fi
-
-    ## garbage collection
-    # if not, next time warp will pick up variables from this run
-    # remember, there's no sub shell
-
-    unset wd_warp
-    unset wd_add
-    unset wd_remove
-    unset wd_show
-    unset wd_list_all
-    unset wd_print_msg
-    unset wd_yesorno
-    unset wd_print_usage
-    unset wd_alt_config
-    unset wd_quiet_mode
-    unset wd_print_version
-
-    unset args
-    unset points
-    unset val &> /dev/null # fixes issue #1
-
-    if [[ ! -z $wd_debug_mode ]]
-    then
-        exit $WD_EXIT_CODE
-    else
-        unset wd_debug_mode
-    fi
-}
+if [[ ! -z $wd_debug_mode ]]
+then
+    exit $WD_EXIT_CODE
+else
+    unset wd_debug_mode
+fi
