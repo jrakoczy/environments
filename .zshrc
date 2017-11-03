@@ -21,6 +21,12 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:hosts' hosts ''
 setopt completealiases
 
+# Command history completion.
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
 unset plugins_path
 
 ###############################################################################
@@ -168,6 +174,28 @@ unset VCS_FOLDERS
 unfunction grep-flag-available
 
 ###############################################################################
+#                                Key bindings                                 #
+###############################################################################
+
+typeset -A key
+
+key[Home]=${terminfo[khome]}
+
+key[End]=${terminfo[kend]}
+key[Insert]=${terminfo[kich1]}
+key[Delete]=${terminfo[kdch1]}
+key[Up]=${terminfo[kcuu1]}
+key[Down]=${terminfo[kcud1]}
+key[Left]=${terminfo[kcub1]}
+key[Right]=${terminfo[kcuf1]}
+key[PageUp]=${terminfo[kpp]}
+key[PageDown]=${terminfo[knp]}
+
+# Command history completion.
+[[ -n "${key[Up]}"       ]]  && bindkey  "${key[Up]}"       up-line-or-beginning-search
+[[ -n "${key[Down]}"     ]]  && bindkey  "${key[Down]}"     down-line-or-beginning-search
+
+###############################################################################
 #                            Other Env Variables                              #
 ###############################################################################
 
@@ -187,4 +215,4 @@ if [ "$TMUX" = "" ]; then
 fi
 
 # Clean up all stale warping points.
-wd clean!
+wd clean! > /dev/null
