@@ -101,14 +101,18 @@ DIRSTACKFILE="$HOME/.cache/zsh/dirs"
 DIRSTACKSIZE=20
 
 # Persist dirstack across sessions.
-install -D /dev/null "$DIRSTACKFILE"
-if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
-  dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
-  [[ -d $dirstack[1] ]] && cd $dirstack[1]
+
+if [[ ! -f $DIRSTACKFILE ]]; then
+    install -D /dev/null "$DIRSTACKFILE"
+fi
+
+if [[ $#dirstack -eq 0 ]]; then
+    dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
+    [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
 
 chpwd() {
-  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
+  print -l "$PWD" ${(u)dirstack} >"$DIRSTACKFILE"
 }
 
 setopt autopushd pushdsilent
@@ -116,10 +120,10 @@ setopt autopushd pushdsilent
 # pushd without args does `pushd ~`.
 setopt pushdtohome
 
-## Remove duplicate entries.
+# Remove duplicate entries.
 setopt pushdignoredups
 
-## This reverts the +/- operators.
+# This reverts the +/- operators.
 setopt pushdminus
 
 ###############################################################################
