@@ -1,15 +1,24 @@
 #!/usr/bin/env bash
 #
-# Dylan's bar script
-#
-# Created by Dylan Araps.
+# Based on @dylanaraps' and michalrus' scripts.
 #
 # Depends on: xorg-xrandr, wmctrl, mpc, lemonbar, ip, xdotool
+
+# Make sure are subprocesses are killed.
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
 font="Roboto:size=10"
 icon="Roboo Mono:size=10"
 height="${BAR_HEIGHT:-36}"
 
+ipc_fifo="$(mktemp)"
+rm "$ipc_fifo"
+mkfifo "$ipc_fifo"
+
+forever() {
+  while true ; do "$@" ; done |\
+      awk -v "key=$1" '{ print key"="$0; fflush(); }' > "$ipc_fifo" &
+}
 
 get_workspaces() {
     # Create a dynamic workspace switcher.
@@ -39,18 +48,53 @@ get_volume() {
 
 }
 
+get_disk_space() {
+    df --output='avail' -h / | grep -v "Avail"
+}
+
+get_proc_usage() {
+     mpstat | awk '{print $4}' | sed -n 4p
+}
+
+get_mem_avail() {
+    printf "$(free -h | awk '/Mem:/ { print $7 }')%"
+}
+
+connection_type() {
+    connection_status="$(nmcli networking connectivity)"
+
+    if [ "$connection_status" == 'full' ]; then
+
+        wifi_strength="$(nmcli -f ACTIVE,SIGNAL device wifi |\
+            awk '/yes/ { print $2 }')"
+
+        [ ! -z "$wifi_strength" ] &&\
+            printf 'wifi_%s' "$wifi_strength" ||\
+            printf 'wired'
+    else
+        printf '%s' "$connection_status"
+    fi
+}
+
+get_network_info() {
+    volume="$(amixer sget Master | grep -o -m 1 -E "[[:digit:]]+%")"
+    case "$volume" in
+        0%|[0-9]%)   vol_icon=" " ;;
+        1?%|2?%|3?%) vol_icon="" ;;
+        4?%|5?%|6?%) vol_icon="" ;;
+        *) vol_icon="" ;;
+    esac
+
+    printf "%s\\n" "$(icon "$vol_icon") ${volume}"
+}
 
 icon() {
     # Format an icon.
     printf "%s\\n" "%{F${color3:-#F0F0F0}}${1}%{F-}"
 }
 
-
 main() {
-    # Main script function.
-
     # Import colors from 'wal'.
-    # https://github.com/dylanaraps/pywal
     . "${HOME}/.cache/wal/colors.sh"
 
     # Loop and print the info.
@@ -58,11 +102,15 @@ main() {
         workspaces="$(get_workspaces)"
         date="$(get_date)"
         volume="$(get_volume)"
+        disk_space="$(get_disk_space)"
+        proc_usage="$(get_proc_usage)"
+        mem_avail="$(get_mem_avail)"
+        con="$(connection_type)"
 
         printf "%s%s%s\\n" \
                "%{l}${workspaces}" \
                "%{c}${date}"\
-               "%{r}${volume}    "
+               "%{r}${volume} ${disk_space} | ${proc_usage} ${mem_avail} | ${con}    "
         sleep .1s
     done |\
 
@@ -71,6 +119,5 @@ main() {
              -B "${color0:-#000000}" -F "${color15:-#F0F0F0}"\
              -n "bar" -f "$font" -f "$icon"
 }
-
 
 main "$@"
