@@ -101,7 +101,7 @@ get_connectivity_info() {
 
         wifi_5?|wifi_6?)                  connectivity_icon="e" ;;
 
-        wifi_7?|wifi_8?|wifi_9?wifi_100)  connectivity_icon="g" ;;
+        wifi_7?|wifi_8?|wifi_9?|wifi_100) connectivity_icon="g" ;;
 
         wired)                            connectivity_icon="w" ;;
 
