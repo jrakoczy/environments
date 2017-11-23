@@ -20,18 +20,10 @@ get_workspaces() {
     printf "%s\\n" "$workspaces"
 }
 
-
 get_date() {
     # Get the date and time.
     printf "%s\\n" "$(date +"%a %d %b - %l:%M %p")"
 }
-
-
-get_song() {
-    # Get the current song from mopidy/mpd.
-    printf "%.100s\\n" "$(mpc current -f '%albumartist% - %title%')"
-}
-
 
 get_volume() {
     # Get the system volume.
