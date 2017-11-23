@@ -57,13 +57,22 @@ get_proc_usage() {
 }
 
 get_mem_avail() {
-    printf "$(free -h | awk '/Mem:/ { print $7 }')%"
+    printf '%s' "$(free -h | awk '/Mem:/ { print $7 }')"
 }
 
+# Returns:
+#   - none;
+#   - limited;
+#   - portal — behind a captive portal and cannot reach the full Internet;
+#   - wifi_<str> where <str> is value between 0-100 representing connection
+#       strength;
+#   - wired;
+#   - unknown.
 connection_type() {
     connection_status="$(nmcli networking connectivity)"
 
-    if [ "$connection_status" == 'full' ]; then
+    # Detect the connection type is connectivity status is fine.
+    if [ "$connection_status" = 'full' ]; then
 
         wifi_strength="$(nmcli -f ACTIVE,SIGNAL device wifi |\
             awk '/yes/ { print $2 }')"
@@ -71,21 +80,36 @@ connection_type() {
         [ ! -z "$wifi_strength" ] &&\
             printf 'wifi_%s' "$wifi_strength" ||\
             printf 'wired'
+
+    # Otherwise just print the status.
     else
         printf '%s' "$connection_status"
     fi
 }
 
-get_network_info() {
-    volume="$(amixer sget Master | grep -o -m 1 -E "[[:digit:]]+%")"
-    case "$volume" in
-        0%|[0-9]%)   vol_icon=" " ;;
-        1?%|2?%|3?%) vol_icon="" ;;
-        4?%|5?%|6?%) vol_icon="" ;;
-        *) vol_icon="" ;;
+# TODO: lte modem
+get_connectivity_info() {
+    connection="$(connection_type)"
+    case "$connection" in
+        none)                             connectivity_icon="b" ;;
+
+        portal|limited)                   connectivity_icon="f" ;;
+
+        wifi_[0-9]|wifi_1?|wifi_2?)       connectivity_icon="c" ;;
+
+        wifi_3?|wifi_4?)                  connectivity_icon="d" ;;
+
+        wifi_5?|wifi_6?)                  connectivity_icon="e" ;;
+
+        wifi_7?|wifi_8?|wifi_9?wifi_100)  connectivity_icon="g" ;;
+
+        wired)                            connectivity_icon="w" ;;
+
+        *)                                connectivity_icon="?" ;;
     esac
 
-    printf "%s\\n" "$(icon "$vol_icon") ${volume}"
+    # TODO: Iconize it.
+    printf "%s\\n" "$connectivity_icon"
 }
 
 icon() {
@@ -105,12 +129,12 @@ main() {
         disk_space="$(get_disk_space)"
         proc_usage="$(get_proc_usage)"
         mem_avail="$(get_mem_avail)"
-        con="$(connection_type)"
+        connectivity="$(get_connectivity_info)"
 
         printf "%s%s%s\\n" \
                "%{l}${workspaces}" \
                "%{c}${date}"\
-               "%{r}${volume} ${disk_space} | ${proc_usage} ${mem_avail} | ${con}    "
+               "%{r}${volume} ${disk_space} | ${proc_usage} ${mem_avail} | ${connectivity}  "
         sleep .1s
     done |\
 
