@@ -203,6 +203,10 @@ export EDITOR=vim
 # The `-t` switch prevents from printing junk output on session start.
 (wal -r -t &)
 
+# Load a colorscheme to shell variables. We can later on use them to customize
+# various widgets.
+source "~/.cache/wal/colors.sh"
+
 if [ "$TMUX" = "" ]; then
     tmux -2
 fi
