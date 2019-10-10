@@ -205,7 +205,9 @@ export EDITOR=vim
 
 # Load a colorscheme to shell variables. We can later on use them to customize
 # various widgets.
-source "~/.cache/wal/colors.sh"
+colors_file=~/.cache/wal/colors.sh
+source "$colors_file"
+export $(cut -d= -f1 "$colors_file" | grep ^color)
 
 if [ "$TMUX" = "" ]; then
     tmux -2
