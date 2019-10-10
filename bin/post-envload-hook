@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# Update nvim plugins
+nvim() {
+    nvim +PlugClean! +PlugUpgrade +PlugUpdate +PlugInstall +qall
+}
+
+# Load dynamic colors for networkmanager-dmenu
+networkmanagerDmenu() {
+    sed -i 's/.*/echo & | envsubst/e' ~/.config/networkmanager-dmenu/config.ini
+}
+
+nvim
+networkmanagerDmenu
+
