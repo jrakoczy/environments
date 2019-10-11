@@ -1,0 +1,9 @@
+~/.cache/wal/colors.sh
+
+# Update nvim plugins
+nvim() {
+    nvim +PlugClean! +PlugUpgrade +PlugUpdate +PlugInstall +qall
+}
+
+nvim
+
