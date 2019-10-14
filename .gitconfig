@@ -11,6 +11,7 @@
 
 [core]
 	safecrlf = false
+	editor = nvim
 
 [color]
 	ui = true
