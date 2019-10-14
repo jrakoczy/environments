@@ -1,0 +1,52 @@
+[advice]
+    statusHint = false
+
+[alias]
+	lg  = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit --date-order
+	lga = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --abbrev-commit --date-order --all
+	s = status
+	c = diff -M --cached
+	d = diff -M
+	a = add -A
+
+[core]
+	safecrlf = false
+	editor = nvim
+
+[color]
+	ui = true
+
+[commit]
+	gpgsign = false
+
+[diff]
+    mnemonicPrefix = true
+    renames = copies
+
+[fetch]
+    prune = true
+    fsckObjects = true
+
+[grep]
+    extendedRegexp = true
+
+[log]
+    follow = true
+
+[merge]
+	conflictstyle = diff3
+	defaultToUpstream = true
+
+[push]
+	default = nothing
+
+[rebase]
+    autosquash = true
+
+[status]
+    showUntrackedFiles = all
+
+[user]
+	name = Jakub Rakoczy
+	email = office@rakoczy.io
+	signingkey = 73998C23
