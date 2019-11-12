@@ -200,8 +200,7 @@ export EDITOR=vim
 ###############################################################################
 
 # Import a colorscheme for each new session, suppressing all control messages.
-# The `-t` switch prevents from printing junk output on session start.
-(wal -r -t &)
+(cat ~/.cache/wal/sequences &)
 
 # Load a colorscheme to shell variables. We can later on use them to customize
 # various widgets.
