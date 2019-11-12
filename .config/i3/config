@@ -100,8 +100,6 @@ client.placeholder      $bg     $bg     $fg  $bg       $bg
 
 client.background       $bg
 
-for_window [class="^.*"] border normal 0
-
 # Always float virtualbox.
 for_window [class="VirtualBox"] floating enable
 
@@ -128,5 +126,8 @@ bindsym $mod+Shift+p "scr crop"
 # Center window
 bindsym $mod+c move position center
 
-# Cycle wallpapers
-bindsym $mod+Shift+w exec "wal -i $HOME/Pictures/Wallpapers -o wal-set"
+font Roboto Mono 24
+
+# Gaps
+for_window [class=".*"] border pixel 1
+gaps inner 100
