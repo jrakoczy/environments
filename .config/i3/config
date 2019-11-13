@@ -126,8 +126,7 @@ bindsym $mod+Shift+p "scr crop"
 # Center window
 bindsym $mod+c move position center
 
-font Roboto Mono 24
-
 # Gaps
-for_window [class=".*"] border pixel 1
-gaps inner 100
+for_window [class=".*"] border pixel 0
+gaps outer 150
+gaps inner 50
