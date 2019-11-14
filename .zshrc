@@ -54,17 +54,11 @@ export SAVEHIST=$HISTSIZE
 #                                  Prompt                                     #
 ###############################################################################
 
-prompt_color() {
-    local hash="$(md5sum <<< "$hostname" | head -c5)"
-    print "$((16#$hash % 255))"
-}
-
 precmd() {
   local last_exitcode="$?"
 
-  local hostname_color="$(prompt_color)"
-  local primary="%{%F{$hostname_color}%B%}"
-  local secondary="%{%F{$((($hostname_color + 10) % 255))}%B%}"
+  local primary="%{%F{$color15}%B%}"
+  local secondary="%{%F{$color4}%B%}"
   local reset='%{%f%k%b%}'
 
   PS1=''
@@ -201,6 +195,7 @@ export EDITOR=vim
 
 # Import a colorscheme for each new session, suppressing all control messages.
 (cat ~/.cache/wal/sequences &)
+source ~/.cache/wal/colors-tty.sh
 
 # Load a colorscheme to shell variables. We can later on use them to customize
 # various widgets.
