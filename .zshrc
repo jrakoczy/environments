@@ -129,7 +129,11 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
-# Grep
+alias c='clear'
+
+local color_opt='--color=auto'
+
+######### Grep
 
 # is x grep argument available?
 grep-flag-available() {
@@ -140,7 +144,7 @@ GREP_OPTIONS=""
 
 # color grep results
 if grep-flag-available --color=auto; then
-    GREP_OPTIONS+=" --color=auto"
+    GREP_OPTIONS+=" $color_opt"
 fi
 
 # ignore VCS folders (if the necessary grep flags are available)
@@ -159,6 +163,12 @@ alias grep="grep $GREP_OPTIONS"
 unset GREP_OPTIONS
 unset VCS_FOLDERS
 unfunction grep-flag-available
+
+######### ls
+
+alias ls="ls $color_opt"
+alias ll="ls -al $color_opt"
+alias l.="ls -d .* $color_opt"
 
 ###############################################################################
 #                                Key bindings                                 #
