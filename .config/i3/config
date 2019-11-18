@@ -129,4 +129,4 @@ bindsym $mod+c move position center
 # Gaps
 for_window [class=".*"] border pixel 0
 gaps outer 150
-gaps inner 50
+gaps inner 30

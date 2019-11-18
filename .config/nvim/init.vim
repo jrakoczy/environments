@@ -138,6 +138,9 @@ Plug 'hail2u/vim-css3-syntax'
 Plug 'othree/html5.vim'
 Plug 'LnL7/vim-nix'
 
+" Colorscheme
+Plug 'dylanaraps/wal.vim'
+
 call plug#end()
 
 " }}}
