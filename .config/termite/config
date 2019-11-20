@@ -2,7 +2,7 @@
 
 [options]
 
-font = Roboto Mono, Font Awesome 14
+font = Roboto Mono, Material Icons 14
 allow_bold = true
 audible_bell = false
 browser = chromium

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 #
 # Based on @dylanaraps' and michalrus' scripts.
 #
@@ -7,9 +7,9 @@
 # Make sure are subprocesses are killed.
 trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
 
-font="Roboto 10"
-icon="Roboo Mono 10"
-height="${BAR_HEIGHT:-36}"
+font="Roboto Mono-11"
+icon="Material Icons-14"
+height="${BAR_HEIGHT:-45}"
 
 ipc_fifo="$(mktemp)"
 rm "$ipc_fifo"
@@ -31,26 +31,26 @@ get_workspaces() {
 
 get_date() {
     # Get the date and time.
-    printf "%s\\n" "$(date +"%a %d %b - %l:%M %p")"
+    printf "%s\\n" "$(date +"%a %d %b   -  %l:%M %p")"
 }
 
 battery() {
     eval "$(cat /sys/class/power_supply/BAT*/uevent | sed 's/^/local /;s/=/="/;s/$/"/')"
-    icon=""
+    icon='\ue1a3'
     warning=
     current=$POWER_SUPPLY_CURRENT_NOW
 
     if [ $POWER_SUPPLY_STATUS = "Discharging" ] ; then
         [ $POWER_SUPPLY_CAPACITY -le 10 ] && warning=1
-        icon=""
+        icon='\ue1a4'
     fi
 
-    text="$icon $POWER_SUPPLY_CAPACITY%"
+    text="$POWER_SUPPLY_CAPACITY%"
 
     if [ $warning ] ; then
-        echo "%{B$c_red} $text %{B-}"
+        echo "%{B$c_red} $icon $text %{B-}"
     else
-        echo "$text"
+        echo "$(icon "$icon") $text"
     fi
 }
 
@@ -58,18 +58,19 @@ get_volume() {
     # Get the system volume.
     volume="$(amixer sget Master | grep -o -m 1 -E "[[:digit:]]+%")"
     case "$volume" in
-        0%|[0-9]%)   vol_icon=" " ;;
-        1?%|2?%|3?%) vol_icon="" ;;
-        4?%|5?%|6?%) vol_icon="" ;;
-        *) vol_icon="" ;;
+        0%)   vol_icon='\ue04f' ;;
+        1?%|2?%|3?%) vol_icon='\ue04e' ;;
+        4?%|5?%|6?%) vol_icon='\ue04d' ;;
+        *) vol_icon='\ue050' ;;
     esac
 
-    printf "%s\\n" "$(icon "$vol_icon") ${volume}"
+    echo "$(icon "$vol_icon") ${volume}"
 
 }
 
 get_disk_space() {
-    df --output='avail' -h / | grep -v "Avail"
+    value="$(df --output='avail' -h / | grep -v "Avail")"
+    echo "$(icon '\ue6c4') $value"
 }
 
 get_proc_usage() {
@@ -90,13 +91,11 @@ get_mem_avail() {
 #   - unknown.
 connection_type() {
     connection_status="$(nmcli networking connectivity)"
-
     # Detect the connection type is connectivity status is fine.
     if [ "$connection_status" = 'full' ]; then
 
         wifi_strength="$(nmcli -f ACTIVE,SIGNAL device wifi |\
             awk '/yes/ { print $2 }')"
-
         [ ! -z "$wifi_strength" ] &&\
             printf 'wifi_%s' "$wifi_strength" ||\
             printf 'wired'
@@ -110,36 +109,32 @@ connection_type() {
 get_connectivity_info() {
     connection="$(connection_type)"
     case "$connection" in
-        none)                             connectivity_icon="b" ;;
+        none)                                            connectivity_icon='\ue1d0' ;;
 
-        portal|limited)                   connectivity_icon="f" ;;
+        portal|limited)                                  connectivity_icon='\ue1cd' ;;
 
-        wifi_[0-9]|wifi_1?|wifi_2?)       connectivity_icon="c" ;;
+        wifi_[0-9]|wifi_1?|wifi_2|wifi_3?|wifi_4?)       connectivity_icon='\ue1cf' ;;
 
-        wifi_3?|wifi_4?)                  connectivity_icon="d" ;;
+        wifi_*)                                          connectivity_icon='\ue1c8' ;;
 
-        wifi_5?|wifi_6?)                  connectivity_icon="e" ;;
+        wired)                                           connectivity_icon='\ue30c' ;;
 
-        wifi_7?|wifi_8?|wifi_9?|wifi_100) connectivity_icon="g" ;;
-
-        wired)                            connectivity_icon="w" ;;
-
-        *)                                connectivity_icon="?" ;;
+        *)                                               connectivity_icon='\ue8fd' ;;
     esac
 
-    # TODO: Iconize it.
-    printf "%s\\n" "$connectivity_icon"
+    echo "$(icon "$connectivity_icon")"
 }
 
 icon() {
     # Format an icon.
-    printf "%s\\n" "%{F${color3:-#F0F0F0}}${1}%{F-}"
+    echo "%{F${color3:-#F0F0F0}}${1}%{F-}"
 }
 
 main() {
     # Import colors from 'wal'.
     . "${HOME}/.cache/wal/colors.sh"
-
+    # local separator="    $(icon '|')    " TODO
+    local separator="   "
     # Loop and print the info.
     while :; do
         workspaces="$(get_workspaces)"
@@ -152,9 +147,9 @@ main() {
         bat="$(battery)"
 
         printf "%s%s%s\\n" \
-               "%{l}${workspaces}" \
+               "%{l}${workspaces}$separator ${proc_usage} ${mem_avail}"\
                "%{c}${date}"\
-               "%{r}${volume} ${disk_space} | ${proc_usage} ${mem_avail} | :!${connectivity} | ${bat} "
+               "%{r}${volume} $separator ${disk_space} $separator ${bat} $separator ${connectivity}  "
         sleep .1s
     done |\
 
