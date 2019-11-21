@@ -12,6 +12,7 @@ networkmanagerDmenu() {
     sed -i 's/.*/echo & | envsubst/e' ~/.config/networkmanager-dmenu/config.ini
 }
 
+wal -i ~/pictures/wallpapers/bridge-to-mountains.jpg
 source ~/.zshrc
 nvimPlugins
 networkmanagerDmenu
