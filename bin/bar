@@ -48,7 +48,7 @@ battery() {
     text="$POWER_SUPPLY_CAPACITY%"
 
     if [ $warning ] ; then
-        echo "%{B$c_red} $icon $text %{B-}"
+        echo "%{F#803636} $icon $text %{F-}"
     else
         echo "$(icon "$icon") $text"
     fi
@@ -68,9 +68,15 @@ get_volume() {
 
 }
 
+avail_space_for_mnt_point() {
+    mount_point="$1"
+    echo "$(df --output='avail' -h "$mount_point" | grep -v "Avail" | tr -d '[:space:]')"
+}
+
 get_disk_space() {
-    value="$(df --output='avail' -h / | grep -v "Avail" | tr -d '[:space:]')"
-    echo "$(icon '\ue6c4') $value"
+    value_root="$(avail_space_for_mnt_point /)"
+    value_home="$(avail_space_for_mnt_point /home)"
+    echo "$(icon '\ue6c4') $value_root/$value_home"
 }
 
 get_proc_usage() {
