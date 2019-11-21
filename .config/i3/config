@@ -130,3 +130,7 @@ bindsym $mod+c move position center
 for_window [class=".*"] border pixel 0
 gaps outer 150
 gaps inner 30
+
+bar {
+    i3bar_command bar
+}
