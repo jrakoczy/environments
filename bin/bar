@@ -69,16 +69,18 @@ get_volume() {
 }
 
 get_disk_space() {
-    value="$(df --output='avail' -h / | grep -v "Avail")"
+    value="$(df --output='avail' -h / | grep -v "Avail" | tr -d '[:space:]')"
     echo "$(icon '\ue6c4') $value"
 }
 
 get_proc_usage() {
-     mpstat | awk '{print $4}' | sed -n 4p
+    value="$(mpstat | awk '{print $4}' | sed -n 4p)"
+    echo "$(icon '\ue162') $value%"
 }
 
 get_mem_avail() {
-    printf '%s' "$(free -h | awk '/Mem:/ { print $7 }')"
+    value="$(free -h | awk '/Mem:/ { print $7 }')"
+    echo "$(icon '\ue322') $value"
 }
 
 # Returns:
@@ -134,7 +136,7 @@ main() {
     # Import colors from 'wal'.
     . "${HOME}/.cache/wal/colors.sh"
     # local separator="    $(icon '|')    " TODO
-    local separator="   "
+    local separator=" "
     # Loop and print the info.
     while :; do
         workspaces="$(get_workspaces)"
@@ -147,9 +149,9 @@ main() {
         bat="$(battery)"
 
         printf "%s%s%s\\n" \
-               "%{l}${workspaces}$separator ${proc_usage} ${mem_avail}"\
+               "%{l}${workspaces} $separator ${volume}"\
                "%{c}${date}"\
-               "%{r}${volume} $separator ${disk_space} $separator ${bat} $separator ${connectivity}  "
+               "%{r}${proc_usage} $separator ${mem_avail} $separator ${disk_space} $separator ${bat} $separator ${connectivity}  "
         sleep .1s
     done |\
 
