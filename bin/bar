@@ -48,7 +48,7 @@ battery() {
     text="$POWER_SUPPLY_CAPACITY%"
 
     if [ $warning ] ; then
-        echo "%{F#803636} $icon $text %{F-}"
+        echo "$(warn_color "$icon $text")"
     else
         echo "$(icon "$icon") $text"
     fi
@@ -64,8 +64,12 @@ get_volume() {
         *) vol_icon='\ue050' ;;
     esac
 
-    echo "$(icon "$vol_icon") ${volume}"
-
+    is_muted="$(pacmd list-sinks | awk '/muted/ {print $2}')"
+    if [ "$is_muted" = 'yes' ] ; then
+        echo "$(warn_color "$vol_icon $volume")"
+    else
+        echo "$(icon "$vol_icon") ${volume}"
+    fi
 }
 
 avail_space_for_mnt_point() {
@@ -136,6 +140,10 @@ get_connectivity_info() {
 icon() {
     # Format an icon.
     echo "%{F${color3:-#F0F0F0}}${1}%{F-}"
+}
+
+warn_color() {
+    echo "%{F#803636}$1%{F-}"
 }
 
 main() {
