@@ -12,6 +12,7 @@ bindsym $mod+d exec rofi -show drun
 # SSH into one  of targets defined in the SSH conf.
 bindsym $mod+s exec rofi -dmenu ssh
 
+bindsym $mod+x exec scrot
 # Change focus.
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -23,6 +24,8 @@ bindsym $mod+Shift+h move left
 bindsym $mod+Shift+j move down
 bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
+
+
 
 # Split in horizontal orientation.
 bindsym $mod+g split h
@@ -112,11 +115,11 @@ bindsym $mod+Return exec termite
 # Pulse Audio controls
 bindcode 123 exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindcode 122 exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindcode 123 exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+bindcode 121 exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
-bindcode 233 exec xbacklight -inc 20 # increase screen brightness
-bindcode 232 exec xbacklight -dec 20 # decrease screen brightness
+bindcode 232 exec brightnessctl set 10%- # increase screen brightness
+bindcode 233 exec brightnessctl set +10%+ # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec "song toggle"
@@ -132,8 +135,13 @@ bindsym $mod+c move position center
 
 # Gaps
 for_window [class=".*"] border pixel 0
-gaps outer 150
-gaps inner 30
+set $gaps_outer 150
+set $gaps_inner 30
+gaps outer $gaps_outer
+gaps inner $gaps_inner
+
+bindsym $mod+b gaps outer current set $gaps_outer; gaps inner current set $gaps_inner
+bindsym $mod+n gaps outer current set 0; gaps top current set 45; gaps inner current set 0;
 
 bar {
     i3bar_command bar
