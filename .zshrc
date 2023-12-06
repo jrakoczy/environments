@@ -12,6 +12,8 @@ fpath=($plugins_path $fpath)
 
 . "$plugins_path/git-prompt"
 
+export PATH="${PATH}:${HOME}/.local/bin/"
+
 # Directory aliases.
 autoload -Uz wd
 
@@ -213,9 +215,6 @@ colors_file=~/.cache/wal/colors.sh
 source "$colors_file"
 export $(cut -d= -f1 "$colors_file" | grep ^color)
 
-if [ "$TMUX" = "" ]; then
-    tmux -2
-fi
 
 # Clean up all stale warping points.
 wd clean! > /dev/null

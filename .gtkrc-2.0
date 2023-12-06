@@ -2,11 +2,11 @@
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
 include "/home/kuba/.gtkrc-2.0.mine"
-gtk-theme-name="Arc-Dark"
-gtk-icon-theme-name="Arc"
-gtk-font-name="Roboto Light 11"
+gtk-theme-name="gtk-dracula"
+gtk-icon-theme-name="hicolor"
+gtk-font-name="Roboto 14"
 gtk-cursor-theme-size=0
-gtk-toolbar-style=GTK_TOOLBAR_ICONS
+gtk-toolbar-style=GTK_TOOLBAR_BOTH
 gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
 gtk-button-images=1
 gtk-menu-images=1
@@ -14,5 +14,4 @@ gtk-enable-event-sounds=1
 gtk-enable-input-feedback-sounds=1
 gtk-xft-antialias=1
 gtk-xft-hinting=1
-gtk-xft-hintstyle="hintslight"
-gtk-xft-rgba="rgb"
+gtk-xft-hintstyle="hintfull"

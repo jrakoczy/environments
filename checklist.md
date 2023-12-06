@@ -1,0 +1,8 @@
+- [ ] LXAppearance + Themes (Dracula)
+- [ ] Fonts
+- [ ] Install Pywal
+- [ ] Install lemonbar-xft with dependencies
+- [ ] Install mpstat
+- [ ] Add bar and other scripts to path
+- [ ] Run post-envload-hook
+- [ ] Modify ~/.cache/wal/colors-rofi-dark.rasi

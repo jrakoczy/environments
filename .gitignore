@@ -1,0 +1,4 @@
+**/nvim/tmp/
+**/nvim/plugged/
+**/nvim/sessions/
+**/nvim/autoload/

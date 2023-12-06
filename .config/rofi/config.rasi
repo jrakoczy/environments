@@ -1,4 +1,4 @@
 configuration {
-    theme: "~/.cache/wal/colors-rofi-dark.rasi";
-    font: "Roboto Mono 14";
+   font: "Roboto 14";
 }
+@theme "~/.cache/wal/colors-rofi-light.rasi"

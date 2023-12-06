@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
 
-
 # Update nvim plugins
 nvimPlugins() {
     nvim +PlugClean! +PlugUpgrade +PlugUpdate +PlugInstall +qall
@@ -12,7 +11,7 @@ networkmanagerDmenu() {
     sed -i 's/.*/echo & | envsubst/e' ~/.config/networkmanager-dmenu/config.ini
 }
 
-wal -i ~/pictures/wallpapers/bridge-to-mountains.jpg
+wal -i ~/Pictures/wallpapers/beach.jpeg
 source ~/.zshrc
 nvimPlugins
 networkmanagerDmenu
