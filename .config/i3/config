@@ -14,7 +14,7 @@ exec --no-startup-id wal -R
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy -t '' --nofork
 exec --no-startup-id nm-applet
 
 # Browse and launch desktop applications.
@@ -25,6 +25,9 @@ bindsym $mod+s exec rofi -dmenu ssh
 
 # Print screen
 bindsym $mod+x exec scrot -s
+
+# Lock sreen
+bindsym $mod+e exec i3lock-fancy -t ''
 
 # Use Mouse+$mod to drag floating windows to their wanted position.
 floating_modifier $mod
@@ -37,8 +40,8 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # Sreen brightness controls
-bindcode 232 exec brightnessctl set 10%- # increase screen brightness
-bindcode 233 exec brightnessctl set 10%+ # decrease screen brightness
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl --min-val=2 -q set 3%-
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl -q set 3%+
 
 # Kill focused window.
 bindsym $mod+q kill
@@ -72,7 +75,7 @@ bindsym $mod+Shift+f floating toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+c layout toggle split
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -176,6 +179,5 @@ client.urgent           $bg     $bg     $fg  $bg       $bg
 client.placeholder      $bg     $bg     $fg  $bg       $bg
 client.background       $bg
 
-bar {
-    i3bar_command bar
-}
+# Launch lemonbar script (kill old instances first to avoid duplicates)
+exec_always --no-startup-id "killall -q lemonbar; ~/.local/bin/bar"

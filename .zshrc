@@ -18,6 +18,7 @@ export PATH="${PATH}:${HOME}/.local/bin/"
 autoload -Uz wd
 
 # Auto-completion.
+fpath+=~/.zfunc
 autoload -U compinit && compinit
 zstyle ':completion:*' menu select
 zstyle ':completion:*:hosts' hosts ''
@@ -132,6 +133,7 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
 alias c='clear'
+alias lsa='ls -alh'
 
 local color_opt='--color=auto'
 

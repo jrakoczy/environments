@@ -3,6 +3,10 @@
 - [ ] Install Pywal
 - [ ] Install lemonbar-xft with dependencies
 - [ ] Install mpstat
+- [ ] Install i3lock-fancy
+- [ ] Install dex
+- [ ] Install xss-lock
 - [ ] Add bar and other scripts to path
 - [ ] Run post-envload-hook
 - [ ] Modify ~/.cache/wal/colors-rofi-dark.rasi
+- [ ] Add a user to group video (for multimedia keys to work)
